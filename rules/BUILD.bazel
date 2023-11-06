@@ -1,1 +1,15 @@
-# do not remove
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+exports_files(["menhir.bzl"])
+
+bzl_library(
+    name = "stardoc",
+    srcs = [
+        # "bindiff_test.bzl",
+        "cppo.bzl",
+        "menhir.bzl"
+        # "ppx_expect_test.bzl",
+        # "ppx_inline_test.bzl",
+        # "ppxlib_executable.bzl"
+    ],
+    visibility = ["//visibility:public"],
+)
