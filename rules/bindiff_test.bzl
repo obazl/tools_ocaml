@@ -14,12 +14,6 @@
 
 # modified for obazl
 
-"""A test rule that compares two binary files.
-
-The rule uses shell command cmp on Linux/macOS/non-Windows, and a cmd.exe
-command (fc.exe) on Windows (no Bash is required).
-"""
-
 load("@bazel_skylib//lib:shell.bzl", "shell")
 
 def _runfiles_path(f):
@@ -141,7 +135,8 @@ fi
 
 _bindiff_test = rule(
     attrs = {
-        "failure_message": attr.string(),
+        "failure_message": attr.string(
+        ),
         "file1": attr.label(
             allow_single_file = True,
             mandatory = True,
@@ -156,17 +151,24 @@ _bindiff_test = rule(
     implementation = _bindiff_test_impl,
 )
 
-def bindiff_test(name, file1, file2, failure_message = None, **kwargs):
-    """A test that compares two binary files.
+def bindiff_test(name, file1, file2,
+                 failure_message = None,
+                 **kwargs):
+    """A macro that generates a rule that compares two binary files.
 
-    The test succeeds if the files' contents match.
+The rule uses shell command `cmp` on Linux/macOS/non-Windows, and a cmd.exe
+command (fc.exe) on Windows (no Bash is required).
 
-    Args:
+Derived from link:https://github.com/bazelbuild/bazel-skylib/blob/main/rules/diff_test.bzl[skylib diff_test,window=_blank].
+
+The test succeeds if the files' contents match.
+
+Args:
       name: The name of the test rule.
       file1: Label of the file to compare to `file2`.
       file2: Label of the file to compare to `file1`.
       failure_message: Additional message to log if the files' contents do not match.
-      **kwargs: The [common attributes for tests](https://bazel.build/reference/be/common-definitions#common-attributes-tests).
+      **kwargs: The link:https://bazel.build/reference/be/common-definitions#common-attributes-tests[common attributes for tests].
     """
     _bindiff_test(
         name = name,
